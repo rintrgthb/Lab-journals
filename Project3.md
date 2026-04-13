@@ -59,9 +59,10 @@ L50 became smaller, only 2 scaffolds cover 50% of the genome;
 Total length preserved, which means we didn’t lose anything;
 The number of unknown nucleotides decreased.
 
+After that I performed **annotation using Prokka**:
+
 conda install -c bioconda prokka
 
-After that I performed **annotation using Prokka**:
 prokka scaffolds_2.fasta \       
   --outdir ecoli_prokka \
   --prefix Ecoli_hybrid \
@@ -70,27 +71,45 @@ prokka scaffolds_2.fasta \
   --genus Escherichia \
   --species coli
 
+*This step is optional*
+
+You can **select 16S ribosomal RNA** and look at the strain that is most similar to the one being studied using **Barrnap**:
+
 conda install -c bioconda barrnap
+
 barrnap --updatedb
+
 barrnap scaffolds_2.fasta --kingdom bac --outseq ecoli_16S.fasta --updatedb
 
-# 1. Скачайте 16S E. coli K-12
+But this tool have some troubles, so you can **try with Prokka** (as me). First, you need to **download the 16S rRNA database**:
+
 curl -o ecoli_16S.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=NC_000913.3&rettype=fasta&retmode=text&seq_start=1516&seq_stop=3034"
 
-# 2. Создайте BLAST базу (ОБЯЗАТЕЛЬНО!)
+Next you have to **create BLAST database**:
+
 makeblastdb -in scaffolds_2.fasta -dbtype nucl
 
-# 3. Строгий BLAST
 blastn -db scaffolds_2 -query ecoli_16S.fasta -outfmt 6 -evalue 1e-50 -out blast_16S.txt
 head -1 blast_16S.txt
 
-# 5. Извлечение scaffold'ов с 16S
+After that you **extract scaffolds with 16S rRNA**:
+
 awk 'NR==FNR{lines[$1]++; next} /^>/{if(lines[$1]) print; next} {print;}' blast_16S.txt scaffolds_2.fasta > ecoliX_16S_raw.fna
 
-# 6. Точный регион 16S (исправленный awk для координат)
 head -1 blast_16S.txt | awk '{print $1 "\t" $9-500 ":" $10+500}' > coords.txt
 seqtk subseq scaffolds_2.fasta coords.txt > ecoliX_16S.fna
 
-# 7. Shiga токсины
+So you have 16S rRNA from your *E.coli X* strain. Whats next? You should **go to the NCBI BLAST homepage, upload your sequence and determine the closest strain to yours**. Halfway here!
+I found out that the closest strain mine is *Escherichia coli 55989*. 
+
+*This step is optional*
+
+You can download Mauve and try to find some differences in 2 genomes, but also you can read about the strain you have found and find out what its pathogenicity is without using Mauve (because mine didnt work at all!)
+
+I found out that the toxicity of the *E. coli 55989* was due to the presence of Shiga toxin genes in it. So I decided to **look for Shiga toxin genes in my *E. coli X***.
+
 grep "stx" prokka_out/ecoliX.gff
+
+And also I have to understand the changes, so I need to **find some genes near the toxin genes**:
+
 grep -A5 -B5 "stx[A-B]" prokka_out/ecoliX.gff
