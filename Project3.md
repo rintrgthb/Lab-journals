@@ -2,11 +2,11 @@
 
 **This project will focus on how to do *de novo* assembly and determine which genes have appeared by horizontal gene transfer (HGT) in *E. coli*, causing it to become highly pathogenic**
 
-Once you have downloaded the data you need for analysis (forward and reverse Illumina reads of *E.coli X* strain), you can start by **examining data quality using fastQC**:
+Once you have downloaded the data you need for analysis (forward (https://d28rh4a8wq0iu5.cloudfront.net/bioinfo/SRR292678sub_S1_L001_R1_001.fastq.gz) and reverse (https://d28rh4a8wq0iu5.cloudfront.net/bioinfo/SRR292678sub_S1_L001_R2_001.fastq.gz) Illumina reads of *E.coli X* strain), you can start by **examining data quality using fastQC**:
 
 fastqc SRR292678sub_S1_L001_R1_001.fastq SRR292678sub_S1_L001_R2_001.fastq
 
-The quality of the reads was high, so I sефrted *de novo* assembly
+The quality of the reads was high, so I started *de novo* assembly
 I **assessed the K-mer and genome size profile using Jellyfish**.I used k-mer sizes of 31, counted k-mers and created a histogram:
 
 conda install -c bioconda jellyfish
