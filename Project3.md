@@ -35,7 +35,7 @@ conda install -c bioconda quast
 
 quast.py scaffolds.fasta -o quast_report --threads 4
 
-I also performed **assemply in hybrid mode** with the addition of PacBio long reads of the same sequence:
+I also performed **assemply in hybrid mode** with the addition of PacBio long reads (https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=SRR1980037&display=download) of the same sequence:
 
 spades.py \
   -1 SRR292678sub_S1_L001_R1_001.fastq \
