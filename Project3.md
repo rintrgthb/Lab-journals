@@ -1,9 +1,23 @@
-# 
+# The list of all the commands used during the execution of Project3 "E. coli outbreak investigation"
+
+**This project will focus on how to do *de novo* assembly and determine which genes have appeared by horizontal gene transfer (HGT) in *E. coli*, causing it to become highly pathogenic**
+
+Once you have downloaded the data you need for analysis (forward and reverse Illumina reads of *E.coli X* strain), you can start by **examining data quality using fastQC**:
+
 fastqc SRR292678sub_S1_L001_R1_001.fastq SRR292678sub_S1_L001_R2_001.fastq
+
+The quality of the reads was high, so I sефrted *de novo* assembly
+I **assessed the K-mer and genome size profile using Jellyfish**.I used k-mer sizes of 31, counted k-mers and created a histogram:
+
+conda install -c bioconda jellyfish
 
 jellyfish count -m 31 -C -s 100M -t 4 -o srr292678_k31.jf SRR292678sub_S1_L001_R1_001.fastq SRR292678sub_S1_L001_R2_001.fastq
 
 jellyfish histo srr292678_k31.jf > srr292678_k31.histo
+
+The histogram can tell us about the genome length, heterozygosity and etc, so we can assess that we are looking at a bacterial genome and know its size before assembly to avoid errors.
+
+**Assembling** was performed using **assembler SPAdes** in the paired-end mode, providing paired reads of *E. coli X* from the library SRR292678 (Illumina):
 
 conda install -c bioconda sra-tools
 conda install -c bioconda spades
@@ -15,15 +29,13 @@ spades.py \
   --isolate \
   --memory 16
 
+After it I checked the **quality of the assembly using QUAST**:
 
 conda install -c bioconda quast
 
-
-quast.py contigs.fasta -o quast_report --threads 4
-
-
-
 quast.py scaffolds.fasta -o quast_report --threads 4
+
+I also performed **assemply in hybrid mode** with the addition of PacBio long reads of the same sequence:
 
 spades.py \
   -1 SRR292678sub_S1_L001_R1_001.fastq \
@@ -33,10 +45,23 @@ spades.py \
   -t 4 \
   --memory 16
 
+And **checked the quality again**:
+
 quast.py scaffolds_2.fasta -o quast_report_2 --threads 4
+
+Tthere is an advantage in using long reads, since the library with a small insert size can resolve short repeats only. 
+
+When assembled in hybrid mode, the performance improved, namely:
+The number of contigs became smaller as shorter ones merged into longer ones;
+The length of the largest contig became half the bacterial chromosome;
+N50 increased ~ 9 times, which means that the length of the longest contig covering 50% of the genome has increased;
+L50 became smaller, only 2 scaffolds cover 50% of the genome;
+Total length preserved, which means we didn’t lose anything;
+The number of unknown nucleotides decreased.
 
 conda install -c bioconda prokka
 
+After that I performed **annotation using Prokka**:
 prokka scaffolds_2.fasta \       
   --outdir ecoli_prokka \
   --prefix Ecoli_hybrid \
