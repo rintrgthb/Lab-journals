@@ -37,7 +37,7 @@ quast.py scaffolds_2.fasta -o quast_report_2 --threads 4
 conda install -c bioconda prokka
 
 prokka scaffolds_2.fasta \       
-  --outdir ecoli_annotated \
+  --outdir ecoli_prokka \
   --prefix Ecoli_hybrid \
   --cpus 4 \
   --kingdom Bacteria \
@@ -48,15 +48,23 @@ conda install -c bioconda barrnap
 barrnap --updatedb
 barrnap scaffolds_2.fasta --kingdom bac --outseq ecoli_16S.fasta --updatedb
 
-curl -o "ecoli_16S.fasta" "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=NC_000913.3&rettype=fasta&retmode=text&seq_start=1516&seq_stop=3034"
+# 1. Скачайте 16S E. coli K-12
+curl -o ecoli_16S.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=NC_000913.3&rettype=fasta&retmode=text&seq_start=1516&seq_stop=3034"
 
-makeblastdb -in scaffolds_2.fasta -dbtype nucl -out scaffolds_db
-blastn -db scaffolds_db -query ecoli_16S.fasta -outfmt 6 -evalue 1e-50 -out blast_16S.txt
+# 2. Создайте BLAST базу (ОБЯЗАТЕЛЬНО!)
+makeblastdb -in scaffolds_2.fasta -dbtype nucl
+
+# 3. Строгий BLAST
+blastn -db scaffolds_2 -query ecoli_16S.fasta -outfmt 6 -evalue 1e-50 -out blast_16S.txt
 head -1 blast_16S.txt
-ecoli % awk 'NR==FNR{lines[$1]++; next} /^>/{if(lines[$1]) print;}' blast_16S.txt scaffolds_2.fasta > ecoliX_16S_raw.fna
-blastn -db scaffolds_db -query ecoli_16S.fasta -outfmt 6 -evalue 1e-20 -perc_identity 80 -out blast_16S_soft.txt
-samtools faidx scaffolds_2.fasta NODE_1_length_2579755_cov_79.346722:2257655-2259173 > ecoliX_16S.fna
 
+# 5. Извлечение scaffold'ов с 16S
+awk 'NR==FNR{lines[$1]++; next} /^>/{if(lines[$1]) print; next} {print;}' blast_16S.txt scaffolds_2.fasta > ecoliX_16S_raw.fna
+
+# 6. Точный регион 16S (исправленный awk для координат)
+head -1 blast_16S.txt | awk '{print $1 "\t" $9-500 ":" $10+500}' > coords.txt
+seqtk subseq scaffolds_2.fasta coords.txt > ecoliX_16S.fna
+
+# 7. Shiga токсины
 grep "stx" prokka_out/ecoliX.gff
-
 grep -A5 -B5 "stx[A-B]" prokka_out/ecoliX.gff
