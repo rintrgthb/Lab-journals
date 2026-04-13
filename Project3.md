@@ -64,8 +64,8 @@ After that I performed **annotation using Prokka**:
 conda install -c bioconda prokka
 
 prokka scaffolds_2.fasta \       
-  --outdir ecoli_prokka \
-  --prefix Ecoli_hybrid \
+  --outdir prokka_out \
+  --prefix ecoliX \
   --cpus 4 \
   --kingdom Bacteria \
   --genus Escherichia \
@@ -106,10 +106,18 @@ I found out that the closest strain mine is *Escherichia coli 55989*.
 
 You can download Mauve and try to find some differences in 2 genomes, but also you can read about the strain you have found and find out what its pathogenicity is without using Mauve (because mine didnt work at all!)
 
-I found out that the toxicity of the *E. coli 55989* was due to the presence of Shiga toxin genes in it. So I decided to **look for Shiga toxin genes in my *E. coli X***.
+I found out that the toxicity of the *E. coli 55989* was due to the presence of Shiga toxin genes in it (*stx2*). So I decided to **look for Shiga toxin genes in my *E. coli X***.
 
 grep "stx" prokka_out/ecoliX.gff
 
 And also I have to understand the changes, so I need to **find some genes near the toxin genes**:
 
 grep -A5 -B5 "stx[A-B]" prokka_out/ecoliX.gff
+
+I learned that new Shiga toxin genes (*stxA, stxB*) had appeared in *E. coli X*, and I also found possible reasons for the changes: around the toxin genes were located 3 consecutive tRNAs and hypothetical proteins - traces of recent prophage insertion.
+
+# So, that's how you determined the reasons for the pathogenicity of the new strain, and also assembled it *de novo*!
+
+*Additional step*
+
+You can also help treat patients by learning about your strain's antibiotic resistance by ResFinder. You just need to upload you scaffolds_2.fasta there. A list of antibiotics and their resistance will be displayed on the screen.
