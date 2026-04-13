@@ -15,7 +15,7 @@ jellyfish count -m 31 -C -s 100M -t 4 -o srr292678_k31.jf SRR292678sub_S1_L001_R
 
 jellyfish histo srr292678_k31.jf > srr292678_k31.histo
 
-The histogram can tell us about the genome length, heterozygosity and etc, so we can assess that we are looking at a bacterial genome and know its size before assembly to avoid errors.
+You can open the histogram by **genomescope**, it will tell us about the genome length, heterozygosity and etc, so we can assess that we are looking at a bacterial genome and know its size before assembly to avoid errors.
 
 **Assembling** was performed using **assembler SPAdes** in the paired-end mode, providing paired reads of *E. coli X* from the library SRR292678 (Illumina):
 
@@ -120,4 +120,4 @@ I learned that new Shiga toxin genes (*stxA, stxB*) had appeared in *E. coli X*,
 
 *Additional step*
 
-You can also help treat patients by learning about your strain's antibiotic resistance by ResFinder. You just need to upload you scaffolds_2.fasta there. A list of antibiotics and their resistance will be displayed on the screen.
+You can also help treat patients by learning about your strain's antibiotic resistance by **ResFinder**. You just need to upload you scaffolds_2.fasta there. A list of antibiotics and their resistance will be displayed on the screen.
