@@ -1,0 +1,15 @@
+Protein;Blast annotation;Blast E-value;Predicted Pfam domains;Localization WoLF PSORT;Localization TargetP
+g3428.t1;"Myosin regulatory light chain; nmRLC";9E-65;EF-hand domain pair;mito: 18, cyto: 11, extr: 2, nucl: 1;Other
+g3679.t1;Zinc metalloproteinase nas-14;"7e-22
+";Astacin (Peptidase family M12A);extr: 26, mito: 2, lyso: 2, plas: 1, E.R.: 1;Signal peptide, CS pos: 18-19. TFA-AR. Pr: 0.5523
+g4106.t1;-;-;-;E.R.: 14.5, E.R._golg: 9.5, extr: 7, golg: 3.5, lyso: 3, pero: 2, plas: 1, mito: 1;Other
+g5237.t1;-;-;-;plas: 24, mito: 8;Other
+g5443.t1;-;-;-;extr: 28, nucl: 3, cyto: 1;Other
+g5616.t1;"Full=U-scoloptoxin(01)-Er1a; U-SLPTX(01)-Er1a";2E-14;Chitin binding Peritrophin-A domain;extr: 31, mito: 1;Signal peptide, CS pos: 16-17. ACA-AN. Pr: 0.5270
+g5641.t1;"U-scoloptoxin(01)-Er1a; U-SLPTX(01)-Er1a";5E-13;Chitin binding Peritrophin-A domain;extr: 31, lyso: 1;Signal peptide, CS pos: 16-17. ACA-AS. Pr: 0.4873
+g10513.t1;-;-;-;nucl: 20, cyto_nucl: 14.5, cyto: 7, extr: 3, E.R.: 1, golg: 1;Other
+g12510.t1;-;-;-;plas: 29, cyto: 3;Other
+g12562.t1;"U-scoloptoxin(01)-Er1a; U-SLPTX(01)-Er1a";7E-13;Chitin binding Peritrophin-A domain;extr: 30, lyso: 2;Signal peptide, CS pos: 16-17. SYA-AN. Pr: 0.7910
+g13530.t1;-;-;-;extr: 13, nucl: 6.5, lyso: 5, cyto_nucl: 4.5, plas: 3, E.R.: 3, cyto: 1.5;Signal peptide, CS pos: 19-20. TIP-FT. Pr: 0.3552
+g14472.t1;Damage suppressor protein;0.0;-;nucl: 28, plas: 2, cyto: 1, cysk: 1;Other
+g15484.t1;Vacuolar protein sorting-associated protein 51 homolog;0.0;Vps51/EXO84/COG1 N-terminal, Exocyst complex component Sec5, Dor1-like family, Vacuolar-sorting protein 54, of GARP complex, Exocyst complex component EXOC6/Sec15, N-terminal;nucl: 17.5, cyto_nucl: 15.3333, cyto: 12, cyto_mito: 6.83333, plas: 1, golg: 1;Other
