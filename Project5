@@ -1,13 +1,33 @@
-#
+# The list of all the commands used during the execution of Project5: SNP analysis and proposed modifications
+
+**In this study, I performed a complete SNP analysis of the individual which included genealogy, determination of eye and skin color and predisposition to various diseases.**
+
+At first, I downloaded the dataset via link (it's kinda personal, so you can find some other in open space. **To change the txt file in vcf format I used plink:**
+
 conda install -c bioconda plink
 
-
 plink --23file 23_and_me_input.txt --recode vcf --out snps_clean --output-chr MT --snps-only just-acgt
+
+After that I **removed all SNPs corresponding to deletions and insertions** to make the file compatible with annotation tools using bcftools:
 
 conda install -c bioconda bcftools
 
 bcftools view -i 'GT!="0/0"' snps_clean.vcf > output.vcf
 
+Now it can be possible to **determine skin and eye colour** by looking for them in output file:
+
 grep -E "(rs12913832|rs1545397|rs1426654|rs16891982|rs885479|rs6119471|rs12203592|rs12896399)" output.vcf
 
+You can find the description of which SNP is responsible for which skin/eye color in this article (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3694299/)
+
+To determine the ethnicity of maternal and paternal DNA you can use these websites by uploading there initial txt file (https://dna.jameslick.com/mthap/ or https://haplogrep.i-med.ac.at/ for maternal and https://ytree.morleydna.com/extractFromAutosomal for paternal)
+
+To determine risk factors of different deseases you need web version of VEP (Variant Effect Predictor) and assembly: GRCh37.p13 in in settings (http://grch37.ensembl.org/Homo_sapiens/Tools/VEP) After uploading your output.vcf file, you will receive a txt file as output with selected clinically relevant SNPs.
+
+Next you can work with this file and **select only SNPs with risk factors:**
+
 awk -F'\t' '$38!="-"' VEP_results.txt | grep risk_factor | cut -f 1-3 | sort | uniq > risk_snps.tsv
+
+They will be in the table, and you can annotate them using dbSNP
+
+# That's all! Now you are a clinical bioinformatician and can learn about yourself/others using their
